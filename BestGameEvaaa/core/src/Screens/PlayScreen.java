@@ -39,7 +39,7 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 		img = new Texture("badlogic.jpg");
 		background = new Texture("background.png");
 
-		fort = new Fort(new Sprite(new Texture("fort.png"), 0, 0, 262, 327));
+		fort = new Fort(new Sprite(new Texture("fort.png"), 0, 0, 262, 327), 200);
 		player = new Player(new Sprite(new Texture("player.png")));
 		enemys = new ArrayList<Enemy>();
 		enemys.add(new Enemy(new Sprite(new Texture("enemy.png")), "Name", 100,
