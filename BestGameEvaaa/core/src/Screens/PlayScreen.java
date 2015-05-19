@@ -19,11 +19,7 @@ public class PlayScreen implements Screen {
 		this.game = game;
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
-		
 	}	
-
-
-
 
 	@Override
 	public void resize(int width, int height) {
@@ -55,18 +51,13 @@ public class PlayScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		batch.begin();	
-		batch.draw(img, 0, 0);
-		batch.end();		
+		batch.draw(img,100, 100);
+		batch.end();	
 	}
 
 	@Override
 	public void show() {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-		batch.begin();	
-		batch.draw(img, 0, 0);
-		batch.end();		
+		// TODO Auto-generated method stub
 		
 	}
 
