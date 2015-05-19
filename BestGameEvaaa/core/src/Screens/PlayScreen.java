@@ -1,10 +1,12 @@
 package Screens;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import Objects.Enemy;
 import Objects.Fort;
 import Objects.Player;
+import Objects.Weapon;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -25,9 +27,12 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 
 	Player player;
 	Fort fort;
+	Weapon weapon;
 
 	ArrayList<Enemy> enemys;
-
+	float tangens;
+	LocalTime clickDelay = LocalTime.now();
+	
 	public PlayScreen(BestGameEvaa game) {
 		this.game = game;
 		batch = new SpriteBatch();
@@ -46,6 +51,8 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 		for (int i = 0; i < enemys.size(); i++) {
 			enemys.get(i).setxPosition(100 * (i + 1));
 		}
+		weapon = new Weapon(new Sprite(new Texture("weapon.png")));
+		weapon.setOrigin(5, weapon.getHeight()/2);
 	}
 
 	@Override
@@ -73,8 +80,10 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 
 	@Override
 	public void render(float delta) {
+		Gdx.input.setInputProcessor(Gdx.input.getInputProcessor());
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
 		batch.begin();
 		batch.draw(background, 0, 0);
@@ -90,8 +99,40 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 		}
 
 		batch.end();
+		
+		drawWeapon();
+		handleInput();
 		updateAtackMode();
 		moveEnemys(delta);
+	}
+
+	private void drawWeapon() {
+		batch.begin();
+		weapon.draw(batch);
+		/*batch.draw(weapon, fort.getX() + fort.getWidth() - 
+				(weapon.getWidth() - 10), (fort.getOriginY() + fort.getHeight() + 30));*/
+		weapon.setX(fort.getX() + fort.getWidth() - (weapon.getWidth() - 10));
+		weapon.setY(fort.getOriginY() + fort.getHeight() + 30);
+		batch.end();
+	}
+
+	private void handleInput() {
+		float presentTangens = weapon.getRotation();
+		if(Gdx.input.isTouched() && LocalTime.now().isAfter(clickDelay.plusSeconds(1))){
+			clickDelay = LocalTime.now();
+			float pointerX = Gdx.input.getX();
+			float pointerY = Gdx.input.getY();
+			float d = pointerX - (fort.getX() + fort.getWidth() - 
+				(weapon.getWidth() - 10));
+			float temp = Gdx.graphics.getHeight() - (fort.getOriginY() + fort.getHeight() + 45);
+			float l = pointerY - temp;
+			tangens = (float) Math.toDegrees(Math.atan2(l, d));
+			
+			weapon.setRotation(-tangens);
+			System.out.println("x: " + pointerX + ", y: " + pointerY + ", rot: " + presentTangens + ", tan: " + tangens + 
+					", l: " + l + ", d: " + d);
+		}
+		
 	}
 
 	private void updateAtackMode() {
