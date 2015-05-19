@@ -24,22 +24,34 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 	SpriteBatch batch;
 	Texture img, background;
 	BestGameEvaa game;
-
+	Sprite hpBar, hpBackground;
+	
 	Player player;
 	Fort fort;
 	Weapon weapon;
 
 	ArrayList<Enemy> enemys;
+	
 	float tangens;
 	LocalTime clickDelay = LocalTime.now();
-	
+
 	public PlayScreen(BestGameEvaa game) {
 		this.game = game;
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
 		background = new Texture("background.png");
 
-		fort = new Fort(new Sprite(new Texture("fort.png"), 0, 0, 262, 327));
+		hpBar = new Sprite(new Texture("hpBar.png"), 0, 0, 398, 18);
+		hpBackground = new Sprite(new Texture("hpBackground.png"), 0, 0, 402, 20);
+		
+		//hpBar.setOrigin(0, 0);
+		
+		//hpBackground.setOrigin(0, 0);
+		
+		
+		fort = new Fort(new Sprite(new Texture("fort.png"), 0, 0, 262, 327),200);
+		fort.hp = 200;
+		
 		player = new Player(new Sprite(new Texture("player.png")));
 		enemys = new ArrayList<Enemy>();
 		enemys.add(new Enemy(new Sprite(new Texture("enemy.png")), "Name", 100,
@@ -84,9 +96,21 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
+		
+		fort.hp=fort.hp-1;
+		
+		
 		batch.begin();
+		
 		batch.draw(background, 0, 0);
+		batch.draw(hpBackground, 25, 25);
+		hpBar.setPosition(27, 26);
+		hpBar.setOrigin(0,0);
+		hpBar.setScale((float)((float)fort.hp/(float)fort.maxHp), 1);
+		
+		//batch.draw(hpBar, 27, 26);
+		hpBar.draw(batch);
+		
 		batch.draw(player, fort.getX() + fort.getWidth()
 				- (player.getWidth() + 10),
 				(fort.getOriginY() + fort.getHeight()) - 10);
@@ -97,7 +121,6 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 					- enemys.get(i).getxPosition(),
 					(Gdx.graphics.getHeight() / 100) * 26);
 		}
-
 		batch.end();
 		
 		drawWeapon();
@@ -134,7 +157,7 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 		}
 		
 	}
-
+	
 	private void updateAtackMode() {
 		for (int i = 0; i < enemys.size(); i++) {
 			if (!enemys.get(i).isAttack) {
