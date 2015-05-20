@@ -131,15 +131,15 @@ public class PlayScreen extends PlayScreenFields implements Screen, InputProcess
 			clickDelay = TimeUtils.millis();
 			float pointerX = Gdx.input.getX();
 			float pointerY = Gdx.input.getY();
-			float d = pointerX - (fort.getX() + fort.getWidth() - 
+			float cathetusA = pointerX - (fort.getX() + fort.getWidth() - 
 				(weapon.getWidth() - 10));
 			float temp = Gdx.graphics.getHeight() - (fort.getOriginY() + fort.getHeight() + 45);
-			float l = pointerY - temp;
-			tangens = (float) Math.toDegrees(Math.atan2(l, d));
+			float cathetusB = pointerY - temp;
+			tangens = (float) Math.toDegrees(Math.atan2(cathetusB, cathetusA));
 			
 			weapon.setRotation(-tangens);
 			System.out.println("x: " + pointerX + ", y: " + pointerY + ", rot: " + presentTangens + ", tan: " + tangens + 
-					", l: " + l + ", d: " + d);
+					", l: " + cathetusB + ", d: " + cathetusA);
 		}
 		
 	}
