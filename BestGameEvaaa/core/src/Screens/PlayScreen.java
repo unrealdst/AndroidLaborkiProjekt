@@ -16,6 +16,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.BestGameEvaa;
@@ -29,12 +35,7 @@ public class PlayScreen extends PlayScreenFields implements Screen, InputProcess
 
 		hpBar = new Sprite(new Texture("hpBar.png"), 0, 0, 398, 18);
 		hpBackground = new Sprite(new Texture("hpBackground.png"), 0, 0, 402, 20);
-		
-		//hpBar.setOrigin(0, 0);
-		
-		//hpBackground.setOrigin(0, 0);
-		
-		
+			
 		fort = new Fort(new Sprite(new Texture("fort.png"), 0, 0, 262, 327),200);
 		fort.hp = 200;
 		
@@ -52,6 +53,22 @@ public class PlayScreen extends PlayScreenFields implements Screen, InputProcess
 		weapon = new Weapon(new Sprite(new Texture("weapon.png")));
 		weapon.setOrigin(5, weapon.getHeight()/2);
 		weapon.fireRate = 1000;
+		
+		skin = new Skin(Gdx.files.internal("style/uiskin.json"));
+		stage = new Stage();
+		menuButton =  new Button(skin);
+		menuButton.setBounds(67*1280/Gdx.graphics.getWidth(), 70*720/Gdx.graphics.getHeight(), 100, 100);
+		stage.addActor(menuButton);
+		
+		menuButton.addListener(new InputListener(){
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) 
+			 {
+			 	Gdx.app.log("Example", "touch started at (" + x + ", " + y + ")");
+			 	System.out.println("aaaaaaaaaaaaaaaaaaaaaaa");
+			 	return true;
+			 }
+		});
+	
 	}
 
 	@Override
@@ -95,7 +112,6 @@ public class PlayScreen extends PlayScreenFields implements Screen, InputProcess
 		hpBar.setOrigin(0,0);
 		hpBar.setScale((float)((float)fort.hp/(float)fort.maxHp), 1);
 		
-		//batch.draw(hpBar, 27, 26);
 		hpBar.draw(batch);
 		
 		batch.draw(player, fort.getX() + fort.getWidth()
@@ -108,7 +124,11 @@ public class PlayScreen extends PlayScreenFields implements Screen, InputProcess
 					- enemys.get(i).getxPosition(),
 					(Gdx.graphics.getHeight() / 100) * 26);
 		}
+		
 		batch.end();
+		
+		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1/30f));
+		stage.draw();
 		
 		drawWeapon();
 		handleInput();
@@ -119,9 +139,7 @@ public class PlayScreen extends PlayScreenFields implements Screen, InputProcess
 	private void drawWeapon() {
 		batch.begin();
 		weapon.draw(batch);
-		/*batch.draw(weapon, fort.getX() + fort.getWidth() - 
-				(weapon.getWidth() - 10), (fort.getOriginY() + fort.getHeight() + 30));*/
-		weapon.setX(fort.getX() + fort.getWidth() - (weapon.getWidth() - 10));
+				weapon.setX(fort.getX() + fort.getWidth() - (weapon.getWidth() - 10));
 		weapon.setY(fort.getOriginY() + fort.getHeight() + 30);
 		batch.end();
 	}
