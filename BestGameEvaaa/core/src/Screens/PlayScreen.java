@@ -53,17 +53,13 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		weapon = new Weapon(new Sprite(new Texture("weapon.png")));
 		weapon.setOrigin(5, weapon.getHeight() / 2);
 		weapon.fireRate = 1000;
-<<<<<<< HEAD
+
 		weapon.magazines = 9;
 		weapon.ammo = 7;
 		
 		bullet = new Sprite(new Texture("bullet.png"));
 		bulletSpace = 0;
 		
-		skin = new Skin(Gdx.files.internal("style/uiskin.json"));
-=======
-
->>>>>>> eb4caf5a112e844ea49e5513e19544f034ff6f92
 		stage = new Stage();
 		menuButton = new Button(game.skin);
 		menuButton.setBounds(1195 * 1280 / Gdx.graphics.getWidth(),625 * 720 / Gdx.graphics.getHeight(),75 * 1280 / Gdx.graphics.getWidth(),75 * 720 / Gdx.graphics.getHeight());
