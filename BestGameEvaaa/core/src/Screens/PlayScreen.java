@@ -170,15 +170,23 @@ public class PlayScreen extends PlayScreenFields implements Screen, InputProcess
 	private void EnemysAttack() {
 		for (int i = 0; i < enemys.size(); i++) {
 			Enemy enemy = enemys.get(i);
-			long tempTime = TimeUtils.millis();
 			if (enemy.isAttack) {
-				if(TimeUtils.millis() > tempTime + enemy.getAtcSpeed()){
+				if(TimeUtils.millis() > enemy.lastAtc + enemy.getAtcSpeed()){
+					enemy.lastAtc = TimeUtils.millis();
 					fort.hp -= enemy.getAtc();
+					endGame();
 				}
 			}
 		}	
 	}
 	
+	private void endGame() {
+		if(fort.hp < 0){
+			fort.hp = 0;
+		}
+		
+	}
+
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
