@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.BestGameEvaa;
 
 public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
@@ -33,7 +34,8 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 	ArrayList<Enemy> enemys;
 	
 	float tangens;
-	LocalTime clickDelay = LocalTime.now();
+	//LocalTime clickDelay = LocalTime.now();
+	long clickDelay = TimeUtils.millis();
 
 	public PlayScreen(BestGameEvaa game) {
 		this.game = game;
@@ -65,6 +67,7 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 		}
 		weapon = new Weapon(new Sprite(new Texture("weapon.png")));
 		weapon.setOrigin(5, weapon.getHeight()/2);
+		weapon.fireRate = 1000;
 	}
 
 	@Override
@@ -141,8 +144,8 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 
 	private void handleInput() {
 		float presentTangens = weapon.getRotation();
-		if(Gdx.input.isTouched() && LocalTime.now().isAfter(clickDelay.plusSeconds(1))){
-			clickDelay = LocalTime.now();
+		if(Gdx.input.isTouched() && TimeUtils.millis() > clickDelay + weapon.fireRate){
+			clickDelay = TimeUtils.millis();
 			float pointerX = Gdx.input.getX();
 			float pointerY = Gdx.input.getY();
 			float d = pointerX - (fort.getX() + fort.getWidth() - 
