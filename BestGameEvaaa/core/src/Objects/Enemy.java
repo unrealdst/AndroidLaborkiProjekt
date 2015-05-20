@@ -1,8 +1,6 @@
 package Objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.utils.TimeUtils;
 
 public class Enemy extends Sprite {
 
