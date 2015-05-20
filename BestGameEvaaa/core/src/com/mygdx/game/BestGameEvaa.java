@@ -1,28 +1,26 @@
 package com.mygdx.game;
 
+import Screens.MainManu;
 import Screens.PlayScreen;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class BestGameEvaa extends Game {
-	SpriteBatch batch;
-	Texture img;
+
 	public PlayScreen play;
-	
+	public MainManu mainMenu;
+	public Skin skin;
 	
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		skin = new Skin(Gdx.files.internal("style/uiskin.json"));
 		play = new PlayScreen(this);
-		
-		setScreen(play);		
+		mainMenu = new MainManu(this);
+		setScreen(mainMenu);
 	}
 
 	@Override
