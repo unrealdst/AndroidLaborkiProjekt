@@ -20,23 +20,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.BestGameEvaa;
 
-public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
-
-	SpriteBatch batch;
-	Texture img, background;
-	BestGameEvaa game;
-	Sprite hpBar, hpBackground;
-	
-	Player player;
-	Fort fort;
-	Weapon weapon;
-
-	ArrayList<Enemy> enemys;
-	
-	float tangens;
-	//LocalTime clickDelay = LocalTime.now();
-	long clickDelay = TimeUtils.millis();
-
+public class PlayScreen extends PlayScreenFields implements Screen, InputProcessor, ApplicationListener {
 	public PlayScreen(BestGameEvaa game) {
 		this.game = game;
 		batch = new SpriteBatch();
