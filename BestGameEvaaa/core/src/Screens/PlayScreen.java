@@ -57,11 +57,11 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 		player = new Player(new Sprite(new Texture("player.png")));
 		enemys = new ArrayList<Enemy>();
 		enemys.add(new Enemy(new Sprite(new Texture("enemy.png")), "Name", 100,
-				10, 10, 10, 150, 1000));
+				10, 10, 2000, 150, 1000));
 		enemys.add(new Enemy(new Sprite(new Texture("enemy.png")), "Name", 100,
-				10, 10, 10, 60, 1000));
+				10, 10, 2000, 60, 1000));
 		enemys.add(new Enemy(new Sprite(new Texture("enemy.png")), "Name", 100,
-				10, 10, 10, 90, 1000));
+				10, 10, 2000, 90, 1000));
 		for (int i = 0; i < enemys.size(); i++) {
 			enemys.get(i).setxPosition(100 * (i + 1));
 		}
@@ -100,9 +100,6 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		
-		fort.hp=fort.hp-1;
-		
-		
 		batch.begin();
 		
 		batch.draw(background, 0, 0);
@@ -130,7 +127,9 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 		handleInput();
 		updateAtackMode();
 		moveEnemys(delta);
+		EnemysAttack();
 	}
+
 
 	private void drawWeapon() {
 		batch.begin();
@@ -182,9 +181,20 @@ public class PlayScreen implements Screen, InputProcessor, ApplicationListener {
 						(int) ((delta * speed) + oldPosition));
 			}
 		}
-
 	}
 
+	private void EnemysAttack() {
+		for (int i = 0; i < enemys.size(); i++) {
+			Enemy enemy = enemys.get(i);
+			long tempTime = TimeUtils.millis();
+			if (enemy.isAttack) {
+				if(TimeUtils.millis() > tempTime + enemy.getAtcSpeed()){
+					fort.hp -= enemy.getAtc();
+				}
+			}
+		}	
+	}
+	
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
