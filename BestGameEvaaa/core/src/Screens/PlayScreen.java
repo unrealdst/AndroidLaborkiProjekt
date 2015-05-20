@@ -53,6 +53,11 @@ public class PlayScreen extends PlayScreenFields implements Screen, InputProcess
 		weapon = new Weapon(new Sprite(new Texture("weapon.png")));
 		weapon.setOrigin(5, weapon.getHeight()/2);
 		weapon.fireRate = 1000;
+		weapon.magazines = 9;
+		weapon.ammo = 7;
+		
+		bullet = new Sprite(new Texture("bullet.png"));
+		bulletSpace = 0;
 		
 		skin = new Skin(Gdx.files.internal("style/uiskin.json"));
 		stage = new Stage();
@@ -128,6 +133,7 @@ public class PlayScreen extends PlayScreenFields implements Screen, InputProcess
 		stage.draw();
 		
 		drawWeapon();
+		drawBullets();
 		handleInput();
 		updateAtackMode();
 		moveEnemys(delta);
@@ -141,6 +147,20 @@ public class PlayScreen extends PlayScreenFields implements Screen, InputProcess
 				weapon.setX(fort.getX() + fort.getWidth() - (weapon.getWidth() - 10));
 		weapon.setY(fort.getOriginY() + fort.getHeight() + 30);
 		batch.end();
+	}
+	
+	private void drawBullets(){
+		batch.begin();
+		for(int i = 0; i < weapon.ammo; i++){
+			bullet.draw(batch);
+			bullet.setX(((1280/Gdx.graphics.getWidth())*40) + bulletSpace);
+			bullet.setY(((720/Gdx.graphics.getHeight())*680));
+			//System.out.println(weapon.ammo);
+			bulletSpace += 10;
+			if(i == 0) bulletSpace = 0;
+		}
+		batch.end();
+		
 	}
 
 	private void handleInput() {
@@ -158,6 +178,14 @@ public class PlayScreen extends PlayScreenFields implements Screen, InputProcess
 			weapon.setRotation(-tangens);
 			System.out.println("x: " + pointerX + ", y: " + pointerY + ", rot: " + presentTangens + ", tan: " + tangens + 
 					", l: " + cathetusB + ", d: " + cathetusA);
+			
+			weapon.ammo--;
+			if(weapon.ammo == 0){
+				weapon.magazines -= 1;
+				if(weapon.magazines >= 0){
+					weapon.ammo = 7;					
+				}
+			}
 		}
 		
 	}

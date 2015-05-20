@@ -22,6 +22,7 @@ public abstract class PlayScreenFields {
 	protected Texture img, background;
 	protected BestGameEvaa game;
 	protected Sprite hpBar, hpBackground;
+	protected Sprite bullet;
 	
 	protected Player player;
 	protected Fort fort;
@@ -30,6 +31,7 @@ public abstract class PlayScreenFields {
 	protected ArrayList<Enemy> enemys;
 	protected float tangens;
 	protected long clickDelay = TimeUtils.millis();
+	protected int bulletSpace;
 	
 	protected Button menuButton;  
 	protected Stage stage;

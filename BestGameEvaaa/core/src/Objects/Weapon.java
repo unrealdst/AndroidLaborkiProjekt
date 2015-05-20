@@ -7,6 +7,7 @@ public class Weapon extends Sprite{
 	public int power;
 	public int fireRate;
 	public int ammo;
+	public int magazines;
 	public int recoil;
 	public int reload;
 	
