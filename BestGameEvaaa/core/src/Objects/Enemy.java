@@ -2,6 +2,7 @@ package Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class Enemy extends Sprite {
 
@@ -19,6 +20,7 @@ public class Enemy extends Sprite {
 	private String name;
 
 	private float xPosition;
+	public long lastAtc;
 
 	public Enemy(Sprite sprite, String name, int maxHp, int def, int atc,int atcSpeed, int walkSpeed, int rewerd) {
 		super(sprite);
@@ -30,6 +32,7 @@ public class Enemy extends Sprite {
 		this.walkSpeed = walkSpeed;
 		this.rewerd = rewerd;
 		this.isAttack = false;
+
 	}
 
 	public int getHp() {

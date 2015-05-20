@@ -10,8 +10,7 @@ public class Fort extends Sprite{
 	
 	public Fort(Sprite sprite,int maxHp){
 		super(sprite);
-		this.maxHp =maxHp;
+		this.maxHp = maxHp;
 		this.hp = maxHp;
 	}
-
 }
