@@ -1,6 +1,7 @@
 package Screens;
 
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 import Objects.Bullet;
 import Objects.Enemy;
@@ -34,9 +35,9 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
 		background = new Texture("background.png");
-		
+
 		bullets = new ArrayList<Bullet>();
-		
+
 		hpBar = new Sprite(new Texture("hpBar.png"), 0, 0, 398, 18);
 		hpBackground = new Sprite(new Texture("hpBackground.png"), 0, 0, 402,
 				20);
@@ -133,7 +134,10 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		for (int i = 0; i < bullets.size(); i++) {
 			Bullet bullet = bullets.get(i);
 			batch.draw(bullet, bullet.current.x, bullet.current.y);
+			// echo("bullet cord " + i + ":" + bullet.current.x + " "
+			// + bullet.current.y);
 		}
+		;
 
 		batch.end();
 
@@ -152,11 +156,30 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	}
 
 	private void moveBullets(float delta) {
-		
+
 		for (int i = 0; i < bullets.size(); i++) {
-			bullets.get(i).move(delta);		
+			bullets.get(i).move(delta);
 		}
 
+		diposeUnseeingBullet();
+
+	}
+
+	private void diposeUnseeingBullet() {
+		ArrayList<Bullet> toRemove = new ArrayList<Bullet>();
+		for (Bullet bullet : bullets) {
+			if (Math.abs(bullet.current.x) > Gdx.graphics.getWidth()
+					|| Math.abs(bullet.current.y) > Gdx.graphics.getHeight()) {
+				toRemove.add(bullet);
+
+			}
+		}
+
+		bullets.removeAll(toRemove);
+	}
+
+	private void echo(String s) {
+		System.out.println(s);
 	}
 
 	private void drawWeapon() {
@@ -187,7 +210,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		if (Gdx.input.isTouched()
 				&& TimeUtils.millis() > clickDelay + weapon.fireRate) {
 			Position touch = new Position(Gdx.input.getX(), Gdx.input.getY());
-			
+
 			clickDelay = TimeUtils.millis();
 			float pointerX = Gdx.input.getX();// TODO refactor and extract to
 												// method
@@ -212,14 +235,18 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 					weapon.ammo = 7;
 				}
 			}
-			
+
 			shootFire(touch);
 		}
 	}
 
 	private void shootFire(Position target) {
 		Position from = new Position(weapon.getX(), weapon.getY());
+		 echo("shoot: " + target.x + "-" + from.x + "=" + (target.x - from.x)
+		 + "  " + target.y + "-" + from.y + "=" + (target.y - from.y));
 		Vector2 velocity = new Vector2(target.x - from.x, target.y - from.y);
+		echo("velocity: " + velocity.x + " " + velocity.y);
+
 		Bullet newBullet = new Bullet(from, velocity);
 		bullets.add(newBullet);
 	}
