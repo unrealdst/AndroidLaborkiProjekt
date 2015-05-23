@@ -58,9 +58,11 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		weapon = new Weapon(new Sprite(new Texture("weapon.png")));
 		weapon.setOrigin(5, weapon.getHeight() / 2);
 		weapon.fireRate = 500;
+		weapon.reload = 2000;
 
-		weapon.magazines = 9;
+		weapon.isAmmo = true;
 		weapon.ammo = 7;
+		weapon.magazines = 2;
 
 		bullet = new Sprite(new Texture("cartridge.png"));
 		bulletSpace = 0;
@@ -207,20 +209,28 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	}
 	
 	private void handleInput() {
-
-		if (Gdx.input.isTouched()
-				&& TimeUtils.millis() > clickDelay + weapon.fireRate) {
-			Position touch = new Position(Gdx.input.getX(), Gdx.input.getY());
-			
-			moveWeapon();
-			ammoDecrease();
-			shootFire(touch);
-		}
+			if(weapon.isAmmo){
+				if (Gdx.input.isTouched()
+						&& TimeUtils.millis() > clickDelay + weapon.fireRate) {
+					Position touch = new Position(Gdx.input.getX(), Gdx.input.getY());
+					clickDelay = TimeUtils.millis();
+					moveWeapon();
+					ammoDecrease();				
+					shootFire(touch);
+				}
+			}
+			if(!weapon.isAmmo){
+				if (Gdx.input.isTouched()
+						&& TimeUtils.millis() > clickDelay + weapon.reload) {
+					clickDelay = TimeUtils.millis();
+				reload();
+				}
+			}
 	}
+	
 	
 	private void moveWeapon(){
 		float presentTangens = weapon.getRotation();
-		clickDelay = TimeUtils.millis();
 		float pointerX = Gdx.input.getX();// which refactor? Rename? Why?
 		float pointerY = Gdx.input.getY();
 		float cathetusA = pointerX
@@ -238,9 +248,6 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	}
 	
 	private void ammoDecrease(){
-		if(!weapon.isAmmo){
-			weapon.isAmmo = true;
-		}
 		weapon.ammo--;
 		if (weapon.ammo == 0) {
 			weapon.isAmmo = false;
@@ -248,6 +255,12 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 			if (weapon.magazines >= 0) {
 				weapon.ammo = 7;
 			}
+		}
+	}
+	
+	private void reload(){
+		if(weapon.magazines > 0){
+			weapon.isAmmo = true;	
 		}
 	}
 
