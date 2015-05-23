@@ -8,7 +8,7 @@ public class Bullet extends Sprite{
 	public Position from;
 	public Position current;
 	private Vector2 velocity;
-	private final float speed = 100;
+	private final float speed = 5500;
 
 	public Bullet(Position from, Vector2 velocity) {
 		super(new Sprite(new Texture("bullet.png")));
@@ -16,7 +16,9 @@ public class Bullet extends Sprite{
 		this.from = from;
 		this.current = this.from;
 		this.velocity = velocity;
-		velocity.limit(100);
+		velocity.x = velocity.x * 1000;
+		velocity.y = velocity.y * 1000;
+		velocity.limit(speed);
 	}
 
 	public void move(float delta) {
