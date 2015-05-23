@@ -2,6 +2,7 @@ package Screens;
 
 import java.util.ArrayList;
 
+import Objects.Bullet;
 import Objects.Enemy;
 import Objects.Fort;
 import Objects.Player;
@@ -28,9 +29,11 @@ public abstract class PlayScreenFields {
 	protected Weapon weapon;
 
 	protected ArrayList<Enemy> enemys;
-	protected float tangens;
-	protected long clickDelay = TimeUtils.millis();
-	protected int bulletSpace;
+	protected ArrayList<Bullet> bullets;
+	
+	protected float tangens; // why this is global ?
+	protected long clickDelay = TimeUtils.millis(); // we still use this ? 
+	protected int bulletSpace; // why this is global ?
 	
 	protected Button menuButton;  
 	protected Stage stage;

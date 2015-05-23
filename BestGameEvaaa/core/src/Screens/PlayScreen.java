@@ -2,9 +2,11 @@ package Screens;
 
 import java.util.ArrayList;
 
+import Objects.Bullet;
 import Objects.Enemy;
 import Objects.Fort;
 import Objects.Player;
+import Objects.Position;
 import Objects.Weapon;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -25,44 +28,48 @@ import com.mygdx.game.BestGameEvaa;
 
 public class PlayScreen extends PlayScreenFields implements Screen,
 		InputProcessor, ApplicationListener {
-	
+
 	public PlayScreen(BestGameEvaa game) {
 		this.game = game;
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
 		background = new Texture("background.png");
-
+		
+		bullets = new ArrayList<Bullet>();
+		
 		hpBar = new Sprite(new Texture("hpBar.png"), 0, 0, 398, 18);
 		hpBackground = new Sprite(new Texture("hpBackground.png"), 0, 0, 402,
 				20);
 
-		fort = new Fort(new Sprite(new Texture("fort.png"), 0, 0, 262, 327),
-				200);
-	
+		fort = new Fort(200);
 
-		player = new Player(new Sprite(new Texture("player.png")));
+		player = new Player();
 		enemys = new ArrayList<Enemy>();
-		enemys.add(new Enemy(new Sprite(new Texture("enemy.png")), "Name", 100, 10, 10, 2000,150, 1000));
+		enemys.add(new Enemy(new Sprite(new Texture("enemy2.png")), "Name",
+				100, 10, 10, 2000, 150, 1000));
 		enemys.add(new Enemy(new Sprite(new Texture("enemy.png")), "Name", 100,
-				10, 10, 2000, 60, 1000));
-		enemys.add(new Enemy(new Sprite(new Texture("enemy.png")), "Name", 100,
-				10, 10, 2000, 90, 1000));
+				10, 10, 2000, 70, 1000));
+		enemys.add(new Enemy(new Sprite(new Texture("enemy2.png")), "Name",
+				100, 10, 10, 2000, 90, 1000));
 		for (int i = 0; i < enemys.size(); i++) {
 			enemys.get(i).setxPosition(100 * (i + 1));
 		}
 		weapon = new Weapon(new Sprite(new Texture("weapon.png")));
 		weapon.setOrigin(5, weapon.getHeight() / 2);
-		weapon.fireRate = 1000;
+		weapon.fireRate = 500;
 
 		weapon.magazines = 9;
 		weapon.ammo = 7;
-		
-		bullet = new Sprite(new Texture("bullet.png"));
+
+		bullet = new Sprite(new Texture("cartridge.png"));
 		bulletSpace = 0;
-		
+
 		stage = new Stage();
 		menuButton = new Button(game.skin);
-		menuButton.setBounds(1195 * 1280 / Gdx.graphics.getWidth(),625 * 720 / Gdx.graphics.getHeight(),75 * 1280 / Gdx.graphics.getWidth(),75 * 720 / Gdx.graphics.getHeight());
+		menuButton.setBounds(1195 * 1280 / Gdx.graphics.getWidth(),
+				625 * 720 / Gdx.graphics.getHeight(),
+				75 * 1280 / Gdx.graphics.getWidth(),
+				75 * 720 / Gdx.graphics.getHeight());
 
 		menuButton.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
@@ -123,10 +130,15 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 					(Gdx.graphics.getHeight() / 100) * 26);
 		}
 
+		for (int i = 0; i < bullets.size(); i++) {
+			Bullet bullet = bullets.get(i);
+			batch.draw(bullet, bullet.current.x, bullet.current.y);
+		}
+
 		batch.end();
 
 		Gdx.input.setInputProcessor(stage);
-		
+
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
 
@@ -135,7 +147,16 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		handleInput();
 		updateAtackMode();
 		moveEnemys(delta);
-		EnemysAttack();
+		enemysAttack();
+		moveBullets(delta);
+	}
+
+	private void moveBullets(float delta) {
+		
+		for (int i = 0; i < bullets.size(); i++) {
+			bullets.get(i).move(delta);		
+		}
+
 	}
 
 	private void drawWeapon() {
@@ -145,46 +166,62 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		weapon.setY(fort.getOriginY() + fort.getHeight() + 30);
 		batch.end();
 	}
-	
-	private void drawBullets(){
+
+	private void drawBullets() {
 		batch.begin();
-		for(int i = 0; i < weapon.ammo; i++){
+		for (int i = 0; i < weapon.ammo; i++) {
 			bullet.draw(batch);
-			bullet.setX(((1280/Gdx.graphics.getWidth())*40) + bulletSpace);
-			bullet.setY(((720/Gdx.graphics.getHeight())*680));
-			//System.out.println(weapon.ammo);
+			bullet.setX(((1280 / Gdx.graphics.getWidth()) * 40) + bulletSpace);
+			bullet.setY(((720 / Gdx.graphics.getHeight()) * 680));
+			// System.out.println(weapon.ammo);
 			bulletSpace += 10;
-			if(i == 0) bulletSpace = 0;
+			if (i == 0)
+				bulletSpace = 0;
 		}
 		batch.end();
-		
+
 	}
 
 	private void handleInput() {
 		float presentTangens = weapon.getRotation();
 		if (Gdx.input.isTouched()
 				&& TimeUtils.millis() > clickDelay + weapon.fireRate) {
+			Position touch = new Position(Gdx.input.getX(), Gdx.input.getY());
+			
 			clickDelay = TimeUtils.millis();
-			float pointerX = Gdx.input.getX();
+			float pointerX = Gdx.input.getX();// TODO refactor and extract to
+												// method
 			float pointerY = Gdx.input.getY();
-			float cathetusA = pointerX - (fort.getX() + fort.getWidth() - 
-				(weapon.getWidth() - 10));
-			float temp = Gdx.graphics.getHeight() - (fort.getOriginY() + fort.getHeight() + 45);
+			float cathetusA = pointerX
+					- (fort.getX() + fort.getWidth() - (weapon.getWidth() - 10));
+			float temp = Gdx.graphics.getHeight()
+					- (fort.getOriginY() + fort.getHeight() + 45);
 			float cathetusB = pointerY - temp;
 			tangens = (float) Math.toDegrees(Math.atan2(cathetusB, cathetusA));
 
 			weapon.setRotation(-tangens);
-			System.out.println("x: " + pointerX + ", y: " + pointerY + ", rot: " + presentTangens + ", tan: " + tangens + 
-					", l: " + cathetusB + ", d: " + cathetusA);
-			
+
+			System.out.println("x: " + pointerX + ", y: " + pointerY
+					+ ", rot: " + presentTangens + ", tan: " + tangens
+					+ ", l: " + cathetusB + ", d: " + cathetusA);
+
 			weapon.ammo--;
-			if(weapon.ammo == 0){
+			if (weapon.ammo == 0) {
 				weapon.magazines -= 1;
-				if(weapon.magazines >= 0){
-					weapon.ammo = 7;					
+				if (weapon.magazines >= 0) {
+					weapon.ammo = 7;
 				}
 			}
+			
+			shootFire(touch);
 		}
+	}
+
+	private void shootFire(Position target) {
+		Position from = new Position(weapon.getOriginX(), weapon.getOriginY());
+		Vector2 velocity = new Vector2(target.x - from.x, target.y - from.y);
+		Bullet newBullet = new Bullet(from, velocity);
+		bullets.add(newBullet);
 	}
 
 	private void updateAtackMode() {
@@ -209,7 +246,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		}
 	}
 
-	private void EnemysAttack() {
+	private void enemysAttack() {
 		for (int i = 0; i < enemys.size(); i++) {
 			Enemy enemy = enemys.get(i);
 			if (enemy.isAttack) {
@@ -237,7 +274,6 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 	@Override
 	public void hide() {
-		
 
 	}
 
