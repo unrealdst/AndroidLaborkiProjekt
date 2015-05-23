@@ -20,7 +20,7 @@ public class MainManu extends PlayScreenFields implements Screen {
 	private TextButton newGameButton, exitButton;
 	private BestGameEvaa _game;
 
-	public MainManu(BestGameEvaa game) {
+	public MainManu(BestGameEvaa game) { 
 		this._game = game;
 		batch = new SpriteBatch();
 		background = new Texture("logo.png");
@@ -45,7 +45,7 @@ public class MainManu extends PlayScreenFields implements Screen {
 		
 	}
 
-	private void createNewGameButton() {
+	private void createNewGameButton() {  // TODO click on New Game shouldn't shoot the first bullet
 		newGameButton = new TextButton("New Game", _game.skin);
 		newGameButton.setBounds(Gdx.graphics.getWidth()/2 - 100, Gdx.graphics.getHeight()/2 - 45, 200, 100);
 		newGameButton.addListener(new InputListener() {

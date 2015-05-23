@@ -147,7 +147,9 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		stage.draw();
 
 		drawWeapon();
+		if(weapon.isAmmo){
 		drawBullets();
+		}
 		handleInput();
 		updateAtackMode();
 		moveEnemys(delta);
@@ -202,41 +204,50 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 				bulletSpace = 0;
 		}
 		batch.end();
-
 	}
-
+	
 	private void handleInput() {
-		float presentTangens = weapon.getRotation();
+
 		if (Gdx.input.isTouched()
 				&& TimeUtils.millis() > clickDelay + weapon.fireRate) {
 			Position touch = new Position(Gdx.input.getX(), Gdx.input.getY());
-
-			clickDelay = TimeUtils.millis();
-			float pointerX = Gdx.input.getX();// TODO refactor and extract to
-												// method
-			float pointerY = Gdx.input.getY();
-			float cathetusA = pointerX
-					- (fort.getX() + fort.getWidth() - (weapon.getWidth() - 10));
-			float temp = Gdx.graphics.getHeight()
-					- (fort.getOriginY() + fort.getHeight() + 45);
-			float cathetusB = pointerY - temp;
-			tangens = (float) Math.toDegrees(Math.atan2(cathetusB, cathetusA));
-
-			weapon.setRotation(-tangens);
-
-			System.out.println("x: " + pointerX + ", y: " + pointerY
-					+ ", rot: " + presentTangens + ", tan: " + tangens
-					+ ", l: " + cathetusB + ", d: " + cathetusA);
-
-			weapon.ammo--;
-			if (weapon.ammo == 0) {
-				weapon.magazines -= 1;
-				if (weapon.magazines >= 0) {
-					weapon.ammo = 7;
-				}
-			}
-
+			
+			moveWeapon();
+			ammoDecrease();
 			shootFire(touch);
+		}
+	}
+	
+	private void moveWeapon(){
+		float presentTangens = weapon.getRotation();
+		clickDelay = TimeUtils.millis();
+		float pointerX = Gdx.input.getX();// which refactor? Rename? Why?
+		float pointerY = Gdx.input.getY();
+		float cathetusA = pointerX
+				- (fort.getX() + fort.getWidth() - (weapon.getWidth() - 10));
+		float temp = Gdx.graphics.getHeight()
+				- (fort.getOriginY() + fort.getHeight() + 45);
+		float cathetusB = pointerY - temp;
+		float tangens = (float) Math.toDegrees(Math.atan2(cathetusB, cathetusA));
+
+		weapon.setRotation(-tangens);
+
+		System.out.println("x: " + pointerX + ", y: " + pointerY
+				+ ", rot: " + presentTangens + ", tan: " + tangens
+				+ ", l: " + cathetusB + ", d: " + cathetusA);
+	}
+	
+	private void ammoDecrease(){
+		if(!weapon.isAmmo){
+			weapon.isAmmo = true;
+		}
+		weapon.ammo--;
+		if (weapon.ammo == 0) {
+			weapon.isAmmo = false;
+			weapon.magazines -= 1;
+			if (weapon.magazines >= 0) {
+				weapon.ammo = 7;
+			}
 		}
 	}
 

@@ -31,9 +31,10 @@ public abstract class PlayScreenFields {
 	protected ArrayList<Enemy> enemys;
 	protected ArrayList<Bullet> bullets;
 	
-	protected float tangens; // why this is global ?
-	protected long clickDelay = TimeUtils.millis(); // we still use this ? 
-	protected int bulletSpace; // why this is global ?
+	protected long clickDelay = TimeUtils.millis(); // we still use this ? -yup.
+	protected int bulletSpace; // why this is global ? -Bo nie mo¿e byæ zerowane w metodzie 
+									//drawBullets tylko wczeœniej, inaczej Ÿle znika³y. 
+									//Chcesz to kombinuj z tym coœ.
 	
 	protected Button menuButton;  
 	protected Stage stage;
