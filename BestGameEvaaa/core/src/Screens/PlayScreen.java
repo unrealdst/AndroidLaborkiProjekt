@@ -218,7 +218,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	}
 
 	private void shootFire(Position target) {
-		Position from = new Position(weapon.getOriginX(), weapon.getOriginY());
+		Position from = new Position(weapon.getX(), weapon.getY());
 		Vector2 velocity = new Vector2(target.x - from.x, target.y - from.y);
 		Bullet newBullet = new Bullet(from, velocity);
 		bullets.add(newBullet);
