@@ -33,7 +33,7 @@ public abstract class PlayScreenFields {
 	protected ArrayList<Bullet> bullets;
 	
 	protected long clickDelay = TimeUtils.millis(); 
-	protected int bulletSpace; 
+	//protected int bulletSpace; 
 	
 	protected final int GROUND_LEVEL = (Gdx.graphics.getHeight() / 100) * 26;
 	

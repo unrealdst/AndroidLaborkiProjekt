@@ -65,7 +65,6 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		weapon.magazines = 2;
 
 		bullet = new Sprite(new Texture("cartridge.png"));
-		bulletSpace = 0;
 
 		stage = new Stage();
 		menuButton = new Button(game.skin);
@@ -167,6 +166,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 			for (Bullet bullet : bullets) {
 				echo("enemy "+enemy.getName()+" : "+enemy.getxPosition()+" "+( enemy.getxPosition()+ enemy.getWidth())+" "+GROUND_LEVEL+" "+(enemy.getHeight() + GROUND_LEVEL));
 				echo("bullet: "+ bullet.current.x+" "+bullet.current.y);
+				
 				if (bullet.current.x > enemy.getxPosition()
 						&& bullet.current.x < (enemy.getxPosition()
 								+ enemy.getWidth())
@@ -220,12 +220,13 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 	private void drawBullets() {
 		batch.begin();
+		int bulletSpace=10;
 		for (int i = 0; i < weapon.ammo; i++) {
 			bullet.draw(batch);
-			bullet.setX(((1280 / Gdx.graphics.getWidth()) * 40) + bulletSpace);
+			bullet.setX(((1280 / Gdx.graphics.getWidth()) * 40) + (i*10));
 			bullet.setY(((720 / Gdx.graphics.getHeight()) * 680));
 			// System.out.println(weapon.ammo);
-			bulletSpace += 10;
+			bulletSpace = i*10; // A tak nie mo¿e byæ ?
 			if (i == 0)
 				bulletSpace = 0;
 		}
