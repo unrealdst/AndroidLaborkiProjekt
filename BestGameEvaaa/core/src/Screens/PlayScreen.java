@@ -147,8 +147,8 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		stage.draw();
 
 		drawWeapon();
-		if(weapon.isAmmo){
-		drawBullets();
+		if (weapon.isAmmo) {
+			drawBullets();
 		}
 		handleInput();
 		updateAtackMode();
@@ -205,20 +205,20 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		}
 		batch.end();
 	}
-	
+
 	private void handleInput() {
 
 		if (Gdx.input.isTouched()
 				&& TimeUtils.millis() > clickDelay + weapon.fireRate) {
 			Position touch = new Position(Gdx.input.getX(), Gdx.input.getY());
-			
+
 			moveWeapon();
 			ammoDecrease();
 			shootFire(touch);
 		}
 	}
-	
-	private void moveWeapon(){
+
+	private void moveWeapon() {
 		float presentTangens = weapon.getRotation();
 		clickDelay = TimeUtils.millis();
 		float pointerX = Gdx.input.getX();// which refactor? Rename? Why?
@@ -228,17 +228,18 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		float temp = Gdx.graphics.getHeight()
 				- (fort.getOriginY() + fort.getHeight() + 45);
 		float cathetusB = pointerY - temp;
-		float tangens = (float) Math.toDegrees(Math.atan2(cathetusB, cathetusA));
+		float tangens = (float) Math
+				.toDegrees(Math.atan2(cathetusB, cathetusA));
 
 		weapon.setRotation(-tangens);
 
-		System.out.println("x: " + pointerX + ", y: " + pointerY
-				+ ", rot: " + presentTangens + ", tan: " + tangens
-				+ ", l: " + cathetusB + ", d: " + cathetusA);
+		echo("x: " + pointerX + ", y: " + pointerY + ", rot: "
+				+ presentTangens + ", tan: " + tangens + ", l: " + cathetusB
+				+ ", d: " + cathetusA);
 	}
-	
-	private void ammoDecrease(){
-		if(!weapon.isAmmo){
+
+	private void ammoDecrease() {
+		if (!weapon.isAmmo) {
 			weapon.isAmmo = true;
 		}
 		weapon.ammo--;
@@ -253,9 +254,9 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 	private void shootFire(Position target) {
 		Position from = new Position(weapon.getX(), weapon.getY());
-		 echo("shoot: " + target.x + "-" + from.x + "=" + (target.x - from.x)
-		 + "  " + target.y + "-" + from.y + "=" + (target.y - from.y));
-		Vector2 velocity = new Vector2(target.x - from.x, target.y - from.y);
+		//echo("shoot: " + target.x + "-" + from.x + "=" + (target.x - from.x)
+		//		+ "  " + target.y + "-" + from.y + "=" + (target.y - from.y));
+		Vector2 velocity = new Vector2(Math.abs(target.x - from.x), (-(target.y-from.y)-fort.getHeight()));
 		echo("velocity: " + velocity.x + " " + velocity.y);
 
 		Bullet newBullet = new Bullet(from, velocity);
