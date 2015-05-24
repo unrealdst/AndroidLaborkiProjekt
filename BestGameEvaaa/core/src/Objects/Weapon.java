@@ -12,7 +12,8 @@ public class Weapon extends Sprite{
 	public int recoil;
 	public int reload;
 	
-	public Weapon(Sprite sprite){
+	public Weapon(Sprite sprite,int power){
 		super(sprite);	
+		this.power = power;
 	}
 }

@@ -11,9 +11,8 @@ public class Enemy extends Sprite {
 	private int atcSpeed;
 	private int walkSpeed;
 	private int rewerd;
-	
+
 	public boolean isAttack;
-	
 
 	private String name;
 
@@ -23,6 +22,7 @@ public class Enemy extends Sprite {
 	public Enemy(Sprite sprite, String name, int maxHp, int def, int atc,int atcSpeed, int walkSpeed, int rewerd) {
 		super(sprite);
 
+		this.name=name;
 		this.maxHp = maxHp;
 		this.def = def;
 		this.atc = atc;
@@ -76,7 +76,7 @@ public class Enemy extends Sprite {
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setAttack(boolean isAttack) {
 		this.isAttack = isAttack;
 	}

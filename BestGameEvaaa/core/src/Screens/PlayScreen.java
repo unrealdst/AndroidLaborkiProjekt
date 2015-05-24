@@ -23,9 +23,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.BestGameEvaa;
+import com.sun.media.sound.EmergencySoundbank;
 
 public class PlayScreen extends PlayScreenFields implements Screen,
 		InputProcessor, ApplicationListener {
@@ -46,22 +46,22 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 		player = new Player();
 		enemys = new ArrayList<Enemy>();
-		enemys.add(new Enemy(new Sprite(new Texture("enemy2.png")), "Name",
+		enemys.add(new Enemy(new Sprite(new Texture("enemy2.png")), "Szybki",
 				100, 10, 10, 2000, 150, 1000));
-		enemys.add(new Enemy(new Sprite(new Texture("enemy.png")), "Name", 100,
+		enemys.add(new Enemy(new Sprite(new Texture("enemy.png")), "StarySprite", 100,
 				10, 10, 2000, 70, 1000));
-		enemys.add(new Enemy(new Sprite(new Texture("enemy2.png")), "Name",
+		enemys.add(new Enemy(new Sprite(new Texture("enemy2.png")), "Woolny",
 				100, 10, 10, 2000, 90, 1000));
 		for (int i = 0; i < enemys.size(); i++) {
 			enemys.get(i).setxPosition(100 * (i + 1));
 		}
-		weapon = new Weapon(new Sprite(new Texture("weapon.png")));
+		weapon = new Weapon(new Sprite(new Texture("weapon.png")), 200);
 		weapon.setOrigin(5, weapon.getHeight() / 2);
-		weapon.fireRate = 500;
+		weapon.fireRate = 100;
 		weapon.reload = 2000;
 
 		weapon.isAmmo = true;
-		weapon.ammo = 7;
+		weapon.ammo = 70;
 		weapon.magazines = 2;
 
 		bullet = new Sprite(new Texture("cartridge.png"));
@@ -125,7 +125,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		batch.draw(player, fort.getX() + fort.getWidth()
 				- (player.getWidth() + 10),
 				(fort.getOriginY() + fort.getHeight()) - 10);
-		batch.draw(fort, 0, (Gdx.graphics.getHeight() / 100) * 26);
+		batch.draw(fort, 0, GROUND_LEVEL);
 
 		for (int i = 0; i < enemys.size(); i++) {
 			batch.draw(enemys.get(i), Gdx.graphics.getWidth()
@@ -157,6 +157,30 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		moveEnemys(delta);
 		enemysAttack();
 		moveBullets(delta);
+		checkHit();
+	}
+
+	private void checkHit() {
+		ArrayList<Enemy> deadEnemys = new ArrayList<Enemy>();
+		for (Enemy enemy : enemys) {
+
+			for (Bullet bullet : bullets) {
+				echo("enemy "+enemy.getName()+" : "+enemy.getxPosition()+" "+( enemy.getxPosition()+ enemy.getWidth())+" "+GROUND_LEVEL+" "+(enemy.getHeight() + GROUND_LEVEL));
+				echo("bullet: "+ bullet.current.x+" "+bullet.current.y);
+				if (bullet.current.x > enemy.getxPosition()
+						&& bullet.current.x < (enemy.getxPosition()
+								+ enemy.getWidth())
+						&& bullet.current.y > GROUND_LEVEL
+						&& bullet.current.y < (enemy.getHeight() + GROUND_LEVEL)) {
+					enemy.setHp(enemy.getHp() - weapon.power);
+					if (enemy.getHp() < 0) {
+						deadEnemys.add(enemy);
+					}
+				}
+			}
+		}
+
+		enemys.removeAll(deadEnemys);
 	}
 
 	private void moveBullets(float delta) {
@@ -209,27 +233,27 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	}
 
 	private void handleInput() {
-			if(weapon.isAmmo){
-				if (Gdx.input.isTouched()
-						&& TimeUtils.millis() > clickDelay + weapon.fireRate) {
-					Position touch = new Position(Gdx.input.getX(), Gdx.input.getY());
-					clickDelay = TimeUtils.millis();
-					moveWeapon();
-					ammoDecrease();				
-					shootFire(touch);
-				}
+		if (weapon.isAmmo) {
+			if (Gdx.input.isTouched()
+					&& TimeUtils.millis() > clickDelay + weapon.fireRate) {
+				Position touch = new Position(Gdx.input.getX(),
+						Gdx.input.getY());
+				clickDelay = TimeUtils.millis();
+				moveWeapon();
+				ammoDecrease();
+				shootFire(touch);
 			}
-			if(!weapon.isAmmo){
-				if (Gdx.input.isTouched()
-						&& TimeUtils.millis() > clickDelay + weapon.reload) {
-					clickDelay = TimeUtils.millis();
+		}
+		if (!weapon.isAmmo) {
+			if (Gdx.input.isTouched()
+					&& TimeUtils.millis() > clickDelay + weapon.reload) {
+				clickDelay = TimeUtils.millis();
 				reload();
-				}
 			}
+		}
 	}
-	
-	
-	private void moveWeapon(){
+
+	private void moveWeapon() {
 		float presentTangens = weapon.getRotation();
 		float pointerX = Gdx.input.getX();// which refactor? Rename? Why?
 		float pointerY = Gdx.input.getY();
@@ -243,12 +267,12 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 		weapon.setRotation(-tangens);
 
-		echo("x: " + pointerX + ", y: " + pointerY + ", rot: "
-				+ presentTangens + ", tan: " + tangens + ", l: " + cathetusB
-				+ ", d: " + cathetusA);
+		echo("x: " + pointerX + ", y: " + pointerY + ", rot: " + presentTangens
+				+ ", tan: " + tangens + ", l: " + cathetusB + ", d: "
+				+ cathetusA);
 	}
-	
-	private void ammoDecrease(){
+
+	private void ammoDecrease() {
 		weapon.ammo--;
 		if (weapon.ammo == 0) {
 			weapon.isAmmo = false;
@@ -258,18 +282,19 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 			}
 		}
 	}
-	
-	private void reload(){
-		if(weapon.magazines > 0){
-			weapon.isAmmo = true;	
+
+	private void reload() {
+		if (weapon.magazines > 0) {
+			weapon.isAmmo = true;
 		}
 	}
 
 	private void shootFire(Position target) {
 		Position from = new Position(weapon.getX(), weapon.getY());
-		//echo("shoot: " + target.x + "-" + from.x + "=" + (target.x - from.x)
-		//		+ "  " + target.y + "-" + from.y + "=" + (target.y - from.y));
-		Vector2 velocity = new Vector2(Math.abs(target.x - from.x), (-(target.y-from.y)-fort.getHeight()));
+		// echo("shoot: " + target.x + "-" + from.x + "=" + (target.x - from.x)
+		// + "  " + target.y + "-" + from.y + "=" + (target.y - from.y));
+		Vector2 velocity = new Vector2(Math.abs(target.x - from.x),
+				(-(target.y - from.y) - fort.getHeight()));
 		echo("velocity: " + velocity.x + " " + velocity.y);
 
 		Bullet newBullet = new Bullet(from, velocity);

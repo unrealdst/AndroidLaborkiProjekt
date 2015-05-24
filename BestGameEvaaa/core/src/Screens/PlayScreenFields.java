@@ -8,6 +8,7 @@ import Objects.Fort;
 import Objects.Player;
 import Objects.Weapon;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,10 +32,11 @@ public abstract class PlayScreenFields {
 	protected ArrayList<Enemy> enemys;
 	protected ArrayList<Bullet> bullets;
 	
-	protected long clickDelay = TimeUtils.millis(); // we still use this ? -yup.
-	protected int bulletSpace; // why this is global ? -Bo nie mo¿e byæ zerowane w metodzie 
-									//drawBullets tylko wczeœniej, inaczej Ÿle znika³y. 
-									//Chcesz to kombinuj z tym coœ.
+	protected long clickDelay = TimeUtils.millis(); 
+	protected int bulletSpace; 
+	
+	protected final int GROUND_LEVEL = (Gdx.graphics.getHeight() / 100) * 26;
+	
 	
 	protected Button menuButton;  
 	protected Stage stage;
