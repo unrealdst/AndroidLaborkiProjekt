@@ -46,11 +46,11 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 		player = new Player();
 		enemys = new ArrayList<Enemy>();
-		enemys.add(new Enemy(new Sprite(new Texture("enemy2.png")), "Szybki",
+		enemys.add(new Enemy(new Sprite(new Texture("enemy3.png")), "Szybki",
 				100, 10, 10, 2000, 150, 1000));
 		enemys.add(new Enemy(new Sprite(new Texture("enemy.png")), "StarySprite", 100,
 				10, 10, 2000, 70, 1000));
-		enemys.add(new Enemy(new Sprite(new Texture("enemy2.png")), "Woolny",
+		enemys.add(new Enemy(new Sprite(new Texture("enemy3.png")), "Woolny",
 				100, 10, 10, 2000, 90, 1000));
 		for (int i = 0; i < enemys.size(); i++) {
 			enemys.get(i).setxPosition(100 * (i + 1));
@@ -130,7 +130,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		for (int i = 0; i < enemys.size(); i++) {
 			batch.draw(enemys.get(i), Gdx.graphics.getWidth()
 					- enemys.get(i).getxPosition(),
-					(Gdx.graphics.getHeight() / 100) * 26);
+					(Gdx.graphics.getHeight() / 100) * 26 - 4);
 		}
 
 		for (int i = 0; i < bullets.size(); i++) {
@@ -227,7 +227,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 			bullet.setX(((1280 / Gdx.graphics.getWidth()) * 40) + (i*10));
 			bullet.setY(((720 / Gdx.graphics.getHeight()) * 680));
 			// System.out.println(weapon.ammo);
-			bulletSpace = i*10; // A tak nie mo¿e byæ ?
+			bulletSpace = i*10; // A tak nie mo¿e byæ ?  -Skoro dzia³a to mo¿e.
 			if (i == 0)
 				bulletSpace = 0;
 		}
