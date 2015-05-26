@@ -5,7 +5,6 @@ import java.util.function.Predicate;
 
 import Objects.Bullet;
 import Objects.Enemy;
-import Objects.EnemyAnimation;
 import Objects.Fort;
 import Objects.Player;
 import Objects.Position;
