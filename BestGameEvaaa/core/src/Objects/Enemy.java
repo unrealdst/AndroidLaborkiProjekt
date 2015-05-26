@@ -1,5 +1,6 @@
 package Objects;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Enemy extends Sprite {
@@ -19,8 +20,8 @@ public class Enemy extends Sprite {
 	private float xPosition;
 	public long lastAtc;
 
-	public Enemy(Sprite sprite, String name, int maxHp, int def, int atc,int atcSpeed, int walkSpeed, int rewerd) {
-		super(sprite);
+	public Enemy(Animation animation, String name, int maxHp, int def, int atc,int atcSpeed, int walkSpeed, int rewerd) {
+		super();
 
 		this.name=name;
 		this.maxHp = maxHp;
