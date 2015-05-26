@@ -8,6 +8,7 @@ public class Weapon extends Sprite{
 	public int fireRate;
 	public int ammo;
 	public boolean isAmmo;
+	public int maxAmmo;
 	public int magazines;
 	public int recoil;
 	public int reload;

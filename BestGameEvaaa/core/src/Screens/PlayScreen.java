@@ -61,7 +61,8 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		weapon.reload = 2000;
 
 		weapon.isAmmo = true;
-		weapon.ammo = 70;
+		weapon.maxAmmo = 70;
+		weapon.ammo = weapon.maxAmmo;
 		weapon.magazines = 2;
 
 		bullet = new Sprite(new Texture("cartridge.png"));
@@ -279,7 +280,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 			weapon.isAmmo = false;
 			weapon.magazines -= 1;
 			if (weapon.magazines >= 0) {
-				weapon.ammo = 7;
+				weapon.ammo = weapon.maxAmmo;
 			}
 		}
 	}
