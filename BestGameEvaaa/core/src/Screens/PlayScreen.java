@@ -40,18 +40,30 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 		bullets = new ArrayList<Bullet>();
 
-		  walkSheet = new Texture(Gdx.files.internal("enemyAnimationSprite.png")); // #9
-	        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/FRAME_COLS, walkSheet.getHeight()/FRAME_ROWS);              // #10
-	        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+		  walkSheet = new Texture(Gdx.files.internal("enemyAnimationSprite.png")); 
+	        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/enemyFrameCols, walkSheet.getHeight()/enemyFrameRows);              
+	        walkFrames = new TextureRegion[enemyFrameCols * enemyFrameRows];
 	        int index = 0;
-	        for (int i = 0; i < FRAME_ROWS; i++) {
-	            for (int j = 0; j < FRAME_COLS; j++) {
+	        for (int i = 0; i < enemyFrameRows; i++) {
+	            for (int j = 0; j < enemyFrameCols; j++) {
 	                walkFrames[index++] = tmp[i][j];
 	            }
 	        }
-	        walkAnimation = new Animation(0.025f, walkFrames);      // #11
-	       // spriteBatch = new SpriteBatch();                // #12
-	        stateTime = 0f;                         // #13
+	        walkAnimation = new Animation(0.025f, walkFrames);      
+	       // spriteBatch = new SpriteBatch();                
+	        stateTime = 0f;                    
+	        
+			  reloadingSheet = new Texture(Gdx.files.internal("loading.png")); 
+		        TextureRegion[][] tmpReloading = TextureRegion.split(reloadingSheet, reloadingSheet.getWidth()/enemyFrameCols, reloadingSheet.getHeight()/enemyFrameRows);              
+		        reloadingFrames = new TextureRegion[enemyFrameCols * enemyFrameRows];
+		        int indexreoading = 0;
+		        for (int i = 0; i < enemyFrameRows; i++) {
+		            for (int j = 0; j < enemyFrameCols; j++) {
+		                reloadingFrames[indexreoading++] = tmpReloading[i][j];
+		            }
+		        }
+		        reloadingAnimation = new Animation(0.025f, reloadingFrames);                   
+		        stateTime = 0f;     
 		
 		hpBar = new Sprite(new Texture("hpBar.png"), 0, 0, 398, 18);
 		hpBackground = new Sprite(new Texture("hpBackground.png"), 0, 0, 402,
@@ -77,7 +89,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		for (int i = 0; i < enemys.size(); i++) {
 			enemys.get(i).setxPosition(100 * (i + 1));
 		}
-		currentFrame = walkAnimation.getKeyFrame(stateTime, true); 
+		
 		
 		weapon = new Weapon(new Sprite(new Texture("weapon.png")), 200);
 		weapon.setOrigin(5, weapon.getHeight() / 2);
@@ -85,9 +97,10 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		weapon.reload = 2000;
 
 		weapon.isAmmo = true;
-		weapon.maxAmmo = 70;
+		weapon.maxAmmo = 20;
 		weapon.ammo = weapon.maxAmmo;
-		weapon.magazines = 2;
+		weapon.magazines = 3;
+		reload = false;
 
 		bullet = new Sprite(new Texture("cartridge.png"));
 
@@ -168,11 +181,16 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		
 		// Animated move
 	        stateTime += Gdx.graphics.getDeltaTime();           
+	        currentFrame = walkAnimation.getKeyFrame(stateTime, true); 
 	        
 	        for (int i = 0; i < enemys.size(); i++) {
 	        	batch.draw(currentFrame, Gdx.graphics.getWidth()
 	        				- enemys.get(i).getxPosition(),
 	        				(Gdx.graphics.getHeight() / 100) * 26 - 4);            
+	        }
+	        if(reload){
+	        	currentReloadingFrame = reloadingAnimation.getKeyFrame(stateTime, true);
+	        	batch.draw(currentReloadingFrame, (1280 / Gdx.graphics.getWidth()) * 35, (720 / Gdx.graphics.getHeight()) * 660);	        	
 	        }
 	        
 		batch.end();
@@ -313,14 +331,17 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		if (weapon.ammo == 0) {
 			weapon.isAmmo = false;
 			weapon.magazines -= 1;
-			if (weapon.magazines >= 0) {
+			if (weapon.magazines > 0) {
 				weapon.ammo = weapon.maxAmmo;
+				reload = true;
 			}
 		}
 	}
 
 	private void reload() {
 		if (weapon.magazines > 0) {
+			echo("reload");
+			reload = false;
 			weapon.isAmmo = true;
 		}
 	}
@@ -360,10 +381,24 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	}
 
 	private void enemysAttack() {
-		currentFrame = walkAnimation.getKeyFrame(stateTime, true); 
 		for (int i = 0; i < enemys.size(); i++) {
 			Enemy enemy = enemys.get(i);
 			if (enemy.isAttack) {
+				echo("atak");
+				/*walkSheet = new Texture(Gdx.files.internal("enemy3.png"));
+				enemyFrameCols = 1;
+				enemyFrameRows = 1;
+		        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/enemyFrameCols, walkSheet.getHeight()/enemyFrameRows);              
+		        walkFrames = new TextureRegion[enemyFrameCols * enemyFrameRows];
+		        int index = 0;
+		        for (int j = 0; j < enemyFrameRows; j++) {
+		            for (int k = 0; k < enemyFrameCols; k++) {
+		                walkFrames[index++] = tmp[j][k];
+		            }
+		        }
+		        walkAnimation = new Animation(0.025f, walkFrames);      
+		       // spriteBatch = new SpriteBatch();                
+		        stateTime = 0f;   */
 				if (TimeUtils.millis() > enemy.lastAtc + enemy.getAtcSpeed()) {
 					enemy.lastAtc = TimeUtils.millis();
 					fort.hp -= enemy.getAtc();
