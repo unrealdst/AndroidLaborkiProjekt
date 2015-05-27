@@ -50,7 +50,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	            }
 	        }
 	        walkAnimation = new Animation(0.025f, walkFrames);      // #11
-	       // spriteBatch = new SpriteBatch();                // #12
+
 	        stateTime = 0f;                         // #13
 		
 		hpBar = new Sprite(new Texture("hpBar.png"), 0, 0, 398, 18);
@@ -61,19 +61,11 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 		player = new Player();
 		enemys = new ArrayList<Enemy>();
-		//enemys = new ArrayList<EnemyAnimation>();
-		/*enemys.add(new Enemy(new Sprite(new Texture("enemy3.png")), "Szybki",
-				100, 10, 10, 2000, 150, 1000));
-		enemys.add(new Enemy(new Sprite(new Texture("enemy.png")), "StarySprite", 100,
-				10, 10, 2000, 70, 1000));
-		enemys.add(new Enemy(new Sprite(new Texture("enemy3.png")), "Woolny",
-				100, 10, 10, 2000, 90, 1000));*/
+
 		enemys.add(new Enemy(walkAnimation, "Szybki", 100, 10, 10, 2000, 150, 1000));
 		enemys.add(new Enemy(walkAnimation, "Sredni", 100, 10, 10, 2000, 70, 1000));
 		enemys.add(new Enemy(walkAnimation, "Wolny", 100, 10, 10, 2000, 90, 1000));
-		/*for (int i = 0; i < enemys.size(); i++) {
-			enemys.get(i).setxPosition(100 * (i + 1));
-		}*/
+
 		for (int i = 0; i < enemys.size(); i++) {
 			enemys.get(i).setxPosition(100 * (i + 1));
 		}
@@ -152,11 +144,6 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 				(fort.getOriginY() + fort.getHeight()) - 10);
 		batch.draw(fort, 0, GROUND_LEVEL);
 
-		/*for (int i = 0; i < enemys.size(); i++) {
-			batch.draw(enemys.get(i), Gdx.graphics.getWidth()
-					- enemys.get(i).getxPosition(),
-					(Gdx.graphics.getHeight() / 100) * 26 - 4);
-		}*/
 
 		for (int i = 0; i < bullets.size(); i++) {
 			Bullet bullet = bullets.get(i);
@@ -255,15 +242,12 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 	private void drawBullets() {
 		batch.begin();
-		int bulletSpace=10;
 		for (int i = 0; i < weapon.ammo; i++) {
 			bullet.draw(batch);
 			bullet.setX(((1280 / Gdx.graphics.getWidth()) * 40) + (i*10));
 			bullet.setY(((720 / Gdx.graphics.getHeight()) * 680));
 			// System.out.println(weapon.ammo);
-			bulletSpace = i*10; // A tak nie mo¿e byæ ?  -Skoro dzia³a to mo¿e.
-			if (i == 0)
-				bulletSpace = 0;
+
 		}
 		batch.end();
 	}
