@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.BestGameEvaa;
 import com.sun.media.sound.EmergencySoundbank;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 public class PlayScreen extends PlayScreenFields implements Screen,
 		InputProcessor, ApplicationListener {
@@ -86,13 +87,14 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		
 		weapon = new Weapon(new Sprite(new Texture("weapon.png")), 200);
 		weapon.setOrigin(5, weapon.getHeight() / 2);
-		weapon.fireRate = 100;
+		weapon.fireRate = 500;
 		weapon.reload = 2000;
 
 		weapon.isAmmo = true;
-		weapon.maxAmmo = 20;
+		weapon.maxAmmo = 6;
 		weapon.ammo = weapon.maxAmmo;
-		weapon.magazines = 3;
+		weapon.magazines = 2;
+		weapon.power = 50;
 		reload = false;
 
 		bullet = new Sprite(new Texture("cartridge.png"));
@@ -197,16 +199,16 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		moveEnemys(delta);
 		enemysAttack();
 		moveBullets(delta);
-		checkHit();
+		//checkHit();
 	}
 
 	private void checkHit() {
-		ArrayList<Enemy> deadEnemys = new ArrayList<Enemy>();
+/*		ArrayList<Enemy> deadEnemys = new ArrayList<Enemy>();
 		for (Enemy enemy : enemys) {
 
 			for (Bullet bullet : bullets) {
-				echo("enemy "+enemy.getName()+" : "+enemy.getxPosition()+" "+( enemy.getxPosition()+ enemy.getWidth())+" "+GROUND_LEVEL+" "+(enemy.getHeight() + GROUND_LEVEL));
-				echo("bullet: "+ bullet.current.x+" "+bullet.current.y);
+				//echo("enemy "+enemy.getName()+" : "+enemy.getxPosition()+" "+( enemy.getxPosition()+ enemy.getWidth())+" "+GROUND_LEVEL+" "+(enemy.getHeight() + GROUND_LEVEL));
+				//echo("bullet: "+ bullet.current.x+" "+bullet.current.y);
 				
 				if (bullet.current.x > enemy.getxPosition()
 						&& bullet.current.x < (enemy.getxPosition()
@@ -220,8 +222,22 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 				}
 			}
 		}
-
-		enemys.removeAll(deadEnemys);
+		enemys.removeAll(deadEnemys);*/
+	}
+	
+	private void enemyKill(){
+		for (int i = 0; i < enemys.size(); i++) {
+			//echo("touch:x " + (1280 -Gdx.input.getX()) + ", y: " + Gdx.input.getY() + ", enemyX: " + enemys.get(i).getxPosition() + ", enemyXkoniec: " + (enemys.get(i).getxPosition()+28));
+			if((1280 - Gdx.input.getX()) < enemys.get(i).getxPosition() && (enemys.get(i).getxPosition() - enemyX) < (1280 - Gdx.input.getX()) &&
+					(720 - Gdx.input.getY()) > GROUND_LEVEL && (GROUND_LEVEL + enemyY) > (720 - Gdx.input.getY())){
+				enemys.get(i).setHp(enemys.get(i).getHp() - weapon.power);
+				echo("HIT");
+				if(enemys.get(i).getHp() <= 0){
+					enemys.remove(i);
+					echo("killlllll");					
+				}
+			}
+		}
 	}
 
 	private void moveBullets(float delta) {
@@ -266,7 +282,6 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 			bullet.setX(((1280 / Gdx.graphics.getWidth()) * 40) + (i*10));
 			bullet.setY(((720 / Gdx.graphics.getHeight()) * 680));
 			// System.out.println(weapon.ammo);
-
 		}
 		batch.end();
 	}
@@ -280,6 +295,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 				clickDelay = TimeUtils.millis();
 				moveWeapon();
 				ammoDecrease();
+				enemyKill();
 				shootFire(touch);
 			}
 		}
@@ -290,6 +306,9 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 				reload();
 			}
 		}
+		//Position checkKill = new Position(Gdx.input.getX(),
+		//		Gdx.input.getY());
+		
 	}
 
 	private void moveWeapon() {
@@ -306,9 +325,9 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 		weapon.setRotation(-tangens);
 
-		echo("x: " + pointerX + ", y: " + pointerY + ", rot: " + presentTangens
+		/*echo("x: " + pointerX + ", y: " + pointerY + ", rot: " + presentTangens
 				+ ", tan: " + tangens + ", l: " + cathetusB + ", d: "
-				+ cathetusA);
+				+ cathetusA);*/
 	}
 
 	private void ammoDecrease() {
@@ -337,7 +356,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		// + "  " + target.y + "-" + from.y + "=" + (target.y - from.y));
 		Vector2 velocity = new Vector2(Math.abs(target.x - from.x),
 				(-(target.y - from.y) - fort.getHeight()));
-		echo("velocity: " + velocity.x + " " + velocity.y);
+		//echo("velocity: " + velocity.x + " " + velocity.y);
 
 		Bullet newBullet = new Bullet(from, velocity);
 		bullets.add(newBullet);
@@ -369,7 +388,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		for (int i = 0; i < enemys.size(); i++) {
 			Enemy enemy = enemys.get(i);
 			if (enemy.isAttack) {
-				echo("atak");
+				//echo("atak");
 				/*walkSheet = new Texture(Gdx.files.internal("enemy3.png"));
 				enemyFrameCols = 1;
 				enemyFrameRows = 1;

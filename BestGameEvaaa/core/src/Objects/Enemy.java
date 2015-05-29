@@ -25,6 +25,7 @@ public class Enemy extends Sprite {
 
 		this.name=name;
 		this.maxHp = maxHp;
+		this.hp = maxHp;
 		this.def = def;
 		this.atc = atc;
 		this.atcSpeed = atcSpeed;

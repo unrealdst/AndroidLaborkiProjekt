@@ -43,6 +43,9 @@ public abstract class PlayScreenFields {
 	protected int enemyFrameCols = 8;
 	protected int enemyFrameRows = 1;
 	
+	protected final int enemyX = 28;
+	protected final int enemyY = 51;
+	
 	Animation walkAnimation;          
     Texture walkSheet;              
     TextureRegion[] walkFrames;                     
