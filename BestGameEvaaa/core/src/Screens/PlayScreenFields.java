@@ -24,7 +24,7 @@ public abstract class PlayScreenFields {
 	protected SpriteBatch batch;
 	protected Texture img, background;
 	protected BestGameEvaa game;
-	protected Sprite hpBar, hpBackground;
+	protected Sprite hpBar, hpBackground, loser, winner;
 	protected Sprite bullet;
 	
 	protected Player player;

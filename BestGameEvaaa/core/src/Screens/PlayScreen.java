@@ -38,7 +38,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
 		background = new Texture("background.png");
-
+		
 		bullets = new ArrayList<Bullet>();
 
 		  walkSheet = new Texture(Gdx.files.internal("enemyAnimationSprite.png")); 
@@ -70,6 +70,9 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		hpBar = new Sprite(new Texture("hpBar.png"), 0, 0, 398, 18);
 		hpBackground = new Sprite(new Texture("hpBackground.png"), 0, 0, 402,
 				20);
+		
+		loser = new Sprite(new Texture("loser.png"), 0, 0, 528, 186);
+		winner = new Sprite(new Texture("winner.png"), 0, 0, 633, 119);
 
 		fort = new Fort(200);
 
@@ -160,7 +163,6 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 				(fort.getOriginY() + fort.getHeight()) - 10);
 		batch.draw(fort, 0, GROUND_LEVEL);
 
-
 		for (int i = 0; i < bullets.size(); i++) {
 			Bullet bullet = bullets.get(i);
 			batch.draw(bullet, bullet.current.x, bullet.current.y);
@@ -168,6 +170,26 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 			// + bullet.current.y);
 		}
 		;
+		
+		if(enemys.size() <= 0 && weapon.power != 0){
+			batch.draw(winner, (Gdx.graphics.getWidth() / 2) - (winner.getWidth() / 2), 
+					(Gdx.graphics.getHeight() / 2) - (winner.getHeight() / 2));
+			weapon.isAmmo = false;
+			weapon.ammo = 0;
+			weapon.magazines = 0;
+		}
+		
+		if(fort.hp <= 0){
+			batch.draw(loser,( Gdx.graphics.getWidth() / 2) - (winner.getWidth() / 2), 
+					(Gdx.graphics.getHeight() / 2) - (winner.getHeight() / 2));
+			weapon.power = 0;
+			weapon.ammo = 0;
+			weapon.magazines = 0;
+			weapon.isAmmo = false;
+			for(int i = 0; i < enemys.size(); i++){
+				enemys.remove(enemys.get(i));
+			}
+		}
 		
 		// Animated move
 	        stateTime += Gdx.graphics.getDeltaTime();           
@@ -203,7 +225,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	}
 
 	private void checkHit() {
-/*		ArrayList<Enemy> deadEnemys = new ArrayList<Enemy>();
+		ArrayList<Enemy> deadEnemys = new ArrayList<Enemy>();
 		for (Enemy enemy : enemys) {
 
 			for (Bullet bullet : bullets) {
@@ -222,7 +244,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 				}
 			}
 		}
-		enemys.removeAll(deadEnemys);*/
+		enemys.removeAll(deadEnemys);
 	}
 	
 	private void enemyKill(){
