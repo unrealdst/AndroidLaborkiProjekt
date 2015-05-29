@@ -24,7 +24,7 @@ public abstract class PlayScreenFields {
 	protected SpriteBatch batch;
 	protected Texture img, background;
 	protected BestGameEvaa game;
-	protected Sprite hpBar, hpBackground;
+	protected Sprite hpBar, hpBackground, loser, winner;
 	protected Sprite bullet;
 	
 	protected Player player;
@@ -40,16 +40,26 @@ public abstract class PlayScreenFields {
 	
 	protected final int GROUND_LEVEL = (Gdx.graphics.getHeight() / 100) * 26;
 	
-	protected final int FRAME_COLS = 8;
-	protected final int FRAME_ROWS = 1;
+	protected int enemyFrameCols = 8;
+	protected int enemyFrameRows = 1;
+	
+	protected final int enemyX = 28;
+	protected final int enemyY = 51;
 	
 	Animation walkAnimation;          
     Texture walkSheet;              
     TextureRegion[] walkFrames;                     
     TextureRegion currentFrame;           
-    float stateTime;                                        
+    float stateTime;                 
+    
+    Animation reloadingAnimation;
+    Texture reloadingSheet;
+    TextureRegion[] reloadingFrames;
+    TextureRegion currentReloadingFrame;
     
 	protected Button menuButton;  
 	protected Stage stage;
 	protected Skin skin;
+	
+	boolean reload;
 }
