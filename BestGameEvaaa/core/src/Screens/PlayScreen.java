@@ -40,19 +40,21 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 		bullets = new ArrayList<Bullet>();
 
-		  walkSheet = new Texture(Gdx.files.internal("enemyAnimationSprite.png")); // #9
-	        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/FRAME_COLS, walkSheet.getHeight()/FRAME_ROWS);              // #10
-	        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
-	        int index = 0;
-	        for (int i = 0; i < FRAME_ROWS; i++) {
-	            for (int j = 0; j < FRAME_COLS; j++) {
-	                walkFrames[index++] = tmp[i][j];
-	            }
-	        }
-	        walkAnimation = new Animation(0.025f, walkFrames);      // #11
+		walkSheet = new Texture(Gdx.files.internal("enemyAnimationSprite.png")); // #9
+		TextureRegion[][] tmp = TextureRegion.split(walkSheet,
+				walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight()
+						/ FRAME_ROWS); // #10
+		walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+		int index = 0;
+		for (int i = 0; i < FRAME_ROWS; i++) {
+			for (int j = 0; j < FRAME_COLS; j++) {
+				walkFrames[index++] = tmp[i][j];
+			}
+		}
+		walkAnimation = new Animation(0.025f, walkFrames); // #11
 
-	        stateTime = 0f;                         // #13
-		
+		stateTime = 0f; // #13
+
 		hpBar = new Sprite(new Texture("hpBar.png"), 0, 0, 398, 18);
 		hpBackground = new Sprite(new Texture("hpBackground.png"), 0, 0, 402,
 				20);
@@ -62,15 +64,18 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		player = new Player();
 		enemys = new ArrayList<Enemy>();
 
-		enemys.add(new Enemy(walkAnimation, "Szybki", 100, 10, 10, 2000, 150, 1000));
-		enemys.add(new Enemy(walkAnimation, "Sredni", 100, 10, 10, 2000, 70, 1000));
-		enemys.add(new Enemy(walkAnimation, "Wolny", 100, 10, 10, 2000, 90, 1000));
+		enemys.add(new Enemy(walkAnimation, "Szybki", 100, 10, 10, 2000, 150,
+				1000));
+		enemys.add(new Enemy(walkAnimation, "Sredni", 100, 10, 10, 2000, 70,
+				1000));
+		enemys.add(new Enemy(walkAnimation, "Wolny", 100, 10, 10, 2000, 90,
+				1000));
 
 		for (int i = 0; i < enemys.size(); i++) {
 			enemys.get(i).setxPosition(100 * (i + 1));
 		}
-		currentFrame = walkAnimation.getKeyFrame(stateTime, true); 
-		
+		currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+
 		weapon = new Weapon(new Sprite(new Texture("weapon.png")), 200);
 		weapon.setOrigin(5, weapon.getHeight() / 2);
 		weapon.fireRate = 100;
@@ -144,26 +149,24 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 				(fort.getOriginY() + fort.getHeight()) - 10);
 		batch.draw(fort, 0, GROUND_LEVEL);
 
-
 		for (int i = 0; i < bullets.size(); i++) {
 			Bullet bullet = bullets.get(i);
 			batch.draw(bullet, bullet.current.x, bullet.current.y);
-			// echo("bullet cord " + i + ":" + bullet.current.x + " "
-			// + bullet.current.y);
+			 echo("bullet cord " + i + ":" + bullet.current.x + " "
+			 + bullet.current.y);
 		}
-		;
-		
+
 		// Animated move
-	        stateTime += Gdx.graphics.getDeltaTime();           
-	        
-	        for (int i = 0; i < enemys.size(); i++) {
-	        	batch.draw(currentFrame, Gdx.graphics.getWidth()
-	        				- enemys.get(i).getxPosition(),
-	        				(Gdx.graphics.getHeight() / 100) * 26 - 4);            
-	        }
-	        
+		stateTime += Gdx.graphics.getDeltaTime();
+
+		for (int i = 0; i < enemys.size(); i++) {
+			batch.draw(currentFrame, Gdx.graphics.getWidth()
+					- enemys.get(i).getxPosition(),
+					(Gdx.graphics.getHeight() / 100) * 26 - 4);
+		}
+
 		batch.end();
-		
+
 		Gdx.input.setInputProcessor(stage);
 
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -186,12 +189,15 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		for (Enemy enemy : enemys) {
 
 			for (Bullet bullet : bullets) {
-				echo("enemy "+enemy.getName()+" : "+enemy.getxPosition()+" "+( enemy.getxPosition()+ enemy.getWidth())+" "+GROUND_LEVEL+" "+(enemy.getHeight() + GROUND_LEVEL));
-				echo("bullet: "+ bullet.current.x+" "+bullet.current.y);
-				
+			/*	echo("enemy " + enemy.getName() + " : " + enemy.getxPosition()
+						+ " " + (enemy.getxPosition() + enemy.getWidth()) + " "
+						+ GROUND_LEVEL + " "
+						+ (enemy.getHeight() + GROUND_LEVEL));
+				echo("bullet: " + bullet.current.x + " " + bullet.current.y);*/
+
 				if (bullet.current.x > enemy.getxPosition()
-						&& bullet.current.x < (enemy.getxPosition()
-								+ enemy.getWidth())
+						&& bullet.current.x < (enemy.getxPosition() + enemy
+								.getWidth())
 						&& bullet.current.y > GROUND_LEVEL
 						&& bullet.current.y < (enemy.getHeight() + GROUND_LEVEL)) {
 					enemy.setHp(enemy.getHp() - weapon.power);
@@ -244,7 +250,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 		batch.begin();
 		for (int i = 0; i < weapon.ammo; i++) {
 			bullet.draw(batch);
-			bullet.setX(((1280 / Gdx.graphics.getWidth()) * 40) + (i*10));
+			bullet.setX(((1280 / Gdx.graphics.getWidth()) * 40) + (i * 10));
 			bullet.setY(((720 / Gdx.graphics.getHeight()) * 680));
 			// System.out.println(weapon.ammo);
 
@@ -287,9 +293,9 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 		weapon.setRotation(-tangens);
 
-		echo("x: " + pointerX + ", y: " + pointerY + ", rot: " + presentTangens
-				+ ", tan: " + tangens + ", l: " + cathetusB + ", d: "
-				+ cathetusA);
+		//echo("x: " + pointerX + ", y: " + pointerY + ", rot: " + presentTangens
+			//	+ ", tan: " + tangens + ", l: " + cathetusB + ", d: "
+			//	+ cathetusA);
 	}
 
 	private void ammoDecrease() {
@@ -344,7 +350,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	}
 
 	private void enemysAttack() {
-		currentFrame = walkAnimation.getKeyFrame(stateTime, true); 
+		currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 		for (int i = 0; i < enemys.size(); i++) {
 			Enemy enemy = enemys.get(i);
 			if (enemy.isAttack) {
