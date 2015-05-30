@@ -32,16 +32,14 @@ public abstract class PlayScreenFields {
 	protected Weapon weapon;
 
 	protected ArrayList<Enemy> enemys;
-	//protected ArrayList<EnemyAnimation> enemys;
 	protected ArrayList<Bullet> bullets;
 	
 	protected long clickDelay = TimeUtils.millis(); 
-	//protected int bulletSpace; 
 	
 	protected final int GROUND_LEVEL = (Gdx.graphics.getHeight() / 100) * 26;
 	
-	protected int enemyFrameCols = 8;
-	protected int enemyFrameRows = 1;
+	protected int FrameCols = 8;
+	protected int FrameRows = 1;
 	
 	protected final int enemyX = 28;
 	protected final int enemyY = 51;

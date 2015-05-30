@@ -17,7 +17,7 @@ public class MainManu extends PlayScreenFields implements Screen {
 	private TextButton newGameButton, exitButton;
 	private BestGameEvaa _game;
 
-	public MainManu(BestGameEvaa game) { 
+	public MainManu(BestGameEvaa game) {
 		this._game = game;
 		batch = new SpriteBatch();
 		background = new Texture("logo.png");
@@ -29,26 +29,28 @@ public class MainManu extends PlayScreenFields implements Screen {
 
 	private void createExitGameButton() {
 		exitButton = new TextButton("Exit", _game.skin);
-		exitButton.setBounds(Gdx.graphics.getWidth()/2 - 100, Gdx.graphics.getHeight()/2 - 175, 200, 100);
+		exitButton.setBounds(Gdx.graphics.getWidth() / 2 - 100,
+				Gdx.graphics.getHeight() / 2 - 175, 200, 100);
 		exitButton.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
-					Gdx.app.exit();
+				Gdx.app.exit();
 				return true;
 			}
 		});
 
 		stage.addActor(exitButton);
-		
+
 	}
 
-	private void createNewGameButton() {  // TODO click on New Game shouldn't shoot the first bullet
+	private void createNewGameButton() {
 		newGameButton = new TextButton("New Game", _game.skin);
-		newGameButton.setBounds(Gdx.graphics.getWidth()/2 - 100, Gdx.graphics.getHeight()/2 - 45, 200, 100);
+		newGameButton.setBounds(Gdx.graphics.getWidth() / 2 - 100,
+				Gdx.graphics.getHeight() / 2 - 45, 200, 100);
 		newGameButton.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
-					_game.setScreen(_game.play);
+				_game.setScreen(_game.play);
 				return true;
 			}
 		});
@@ -61,11 +63,11 @@ public class MainManu extends PlayScreenFields implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+
 		batch.begin();
 		batch.draw(background, 0, 0);
 		batch.end();
-		
+
 		Gdx.input.setInputProcessor(stage);
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
