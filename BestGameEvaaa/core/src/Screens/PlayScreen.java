@@ -27,8 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.BestGameEvaa;
 
-public class PlayScreen extends PlayScreenFields implements Screen,
-		InputProcessor, ApplicationListener {
+public class PlayScreen extends PlayScreenFields implements Screen, InputProcessor, ApplicationListener {
 
 	public PlayScreen(BestGameEvaa game) {
 		this.game = game;
@@ -102,14 +101,11 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 	private void createMenuButton(BestGameEvaa game) {
 		menuButton = new Button(game.skin);
-		menuButton.setBounds(1195 * 1280 / Gdx.graphics.getWidth(),
-				625 * 720 / Gdx.graphics.getHeight(),
-				75 * 1280 / Gdx.graphics.getWidth(),
-				75 * 720 / Gdx.graphics.getHeight());
+		menuButton.setBounds(1195 * 1280 / Gdx.graphics.getWidth(), 625 * 720 / Gdx.graphics.getHeight(),
+				75 * 1280 / Gdx.graphics.getWidth(), 75 * 720 / Gdx.graphics.getHeight());
 
 		menuButton.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.exit();
 				return true;
 			}
@@ -118,20 +114,16 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	}
 
 	private void initWeapon() {
-		weapon = new Weapon(new Sprite(new Texture("weapon.png")), 50, 500,
-				2000, 10, 2);
+		weapon = new Weapon(new Sprite(new Texture("weapon.png")), 50, 500, 2000, 10, 2);
 		weapon.setOrigin(5, weapon.getHeight() / 2);
 		reload = false;
 	}
 
 	private void initEnemys() {
 		enemys = new ArrayList<Enemy>();
-		enemys.add(new Enemy(walkAnimation, "Szybki", 100, 10, 10, 2000, 150,
-				1000));
-		enemys.add(new Enemy(walkAnimation, "Sredni", 100, 10, 10, 2000, 70,
-				1000));
-		enemys.add(new Enemy(walkAnimation, "Wolny", 100, 10, 10, 2000, 90,
-				1000));
+		enemys.add(new Enemy(walkAnimation, "Szybki", 100, 10, 10, 2000, 150, 1000));
+		enemys.add(new Enemy(walkAnimation, "Sredni", 100, 10, 10, 2000, 70, 1000));
+		enemys.add(new Enemy(walkAnimation, "Wolny", 100, 10, 10, 2000, 90, 1000));
 
 		for (int i = 0; i < enemys.size(); i++) {
 			enemys.get(i).setxPosition(100 * (i + 1));
@@ -145,16 +137,15 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 	private void createHpBarSprites() {
 		hpBar = new Sprite(new Texture("hpBar.png"), 0, 0, 398, 18);
-		hpBackground = new Sprite(new Texture("hpBackground.png"), 0, 0, 402,
-				20);
+		hpBackground = new Sprite(new Texture("hpBackground.png"), 0, 0, 402, 20);
 	}
 
 	private void createReloadAnimation() {
 		reloadingSheet = new Texture(Gdx.files.internal("loading.png"));
-		TextureRegion[][] tmpReloading = TextureRegion.split(reloadingSheet,
-				reloadingSheet.getWidth() / FrameCols,
+		TextureRegion[][] tmpReloading = TextureRegion.split(reloadingSheet, reloadingSheet.getWidth() / FrameCols,
 				reloadingSheet.getHeight() / FrameRows);
 		reloadingFrames = new TextureRegion[FrameCols * FrameRows];
+
 		int indexreoading = 0;
 		for (int i = 0; i < FrameRows; i++) {
 			for (int j = 0; j < FrameCols; j++) {
@@ -167,9 +158,8 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 	private void createWalkAnimation() {
 		walkSheet = new Texture(Gdx.files.internal("enemyAnimationSprite.png"));
-		TextureRegion[][] tmp = TextureRegion.split(walkSheet,
-				walkSheet.getWidth() / FrameCols, walkSheet.getHeight()
-						/ FrameRows);
+		TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FrameCols, walkSheet.getHeight()
+				/ FrameRows);
 		walkFrames = new TextureRegion[FrameCols * FrameRows];
 		int index = 0;
 		for (int i = 0; i < FrameRows; i++) {
@@ -241,8 +231,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	}
 
 	private void endGameAsLooser() {
-		batch.draw(loser, (Gdx.graphics.getWidth() / 2)
-				- (winner.getWidth() / 2), (Gdx.graphics.getHeight() / 2)
+		batch.draw(loser, (Gdx.graphics.getWidth() / 2) - (winner.getWidth() / 2), (Gdx.graphics.getHeight() / 2)
 				- (winner.getHeight() / 2));
 		weapon.power = 0;
 		weapon.ammo = 0;
@@ -253,8 +242,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	}
 
 	private void endGameAsWinner() {
-		batch.draw(winner, (Gdx.graphics.getWidth() / 2)
-				- (winner.getWidth() / 2), (Gdx.graphics.getHeight() / 2)
+		batch.draw(winner, (Gdx.graphics.getWidth() / 2) - (winner.getWidth() / 2), (Gdx.graphics.getHeight() / 2)
 				- (winner.getHeight() / 2));
 		weapon.isAmmo = false;
 		weapon.ammo = 0;
@@ -270,18 +258,15 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 	private void drawEnemy() {
 		for (int i = 0; i < enemys.size(); i++) {
-			batch.draw(currentFrame, Gdx.graphics.getWidth()
-					- enemys.get(i).getxPosition(),
+			batch.draw(currentFrame, Gdx.graphics.getWidth() - enemys.get(i).getxPosition(),
 					(Gdx.graphics.getHeight() / 100) * 26 - 4);
 		}
 	}
 
 	private void drawReload() {
 		if (reload) {
-			currentReloadingFrame = reloadingAnimation.getKeyFrame(stateTime,
-					true);
-			batch.draw(currentReloadingFrame,
-					(1280 / Gdx.graphics.getWidth()) * 35,
+			currentReloadingFrame = reloadingAnimation.getKeyFrame(stateTime, true);
+			batch.draw(currentReloadingFrame, (1280 / Gdx.graphics.getWidth()) * 35,
 					(720 / Gdx.graphics.getHeight()) * 660);
 		}
 	}
@@ -291,8 +276,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	}
 
 	private void drawPlayer() {
-		batch.draw(player, fort.getX() + fort.getWidth()
-				- (player.getWidth() + 10),
+		batch.draw(player, fort.getX() + fort.getWidth() - (player.getWidth() + 10),
 				(fort.getOriginY() + fort.getHeight()) - 10);
 	}
 
@@ -311,18 +295,19 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 	private void enemyKill() {
 		for (int i = 0; i < enemys.size(); i++) {
-			if ((1280 - Gdx.input.getX()) < enemys.get(i).getxPosition()
-					&& (enemys.get(i).getxPosition() - enemyX) < (1280 - Gdx.input
-							.getX()) && (720 - Gdx.input.getY()) > GROUND_LEVEL
-					&& (GROUND_LEVEL + enemyY) > (720 - Gdx.input.getY())) {
+			if (checkHit(i)) {
 				enemys.get(i).setHp(enemys.get(i).getHp() - weapon.power);
-				echo("HIT");
 				if (enemys.get(i).getHp() <= 0) {
 					enemys.remove(i);
-					echo("killlllll");
 				}
 			}
 		}
+	}
+
+	private boolean checkHit(int i) {
+		return (1280 - Gdx.input.getX()) < enemys.get(i).getxPosition()
+				&& (enemys.get(i).getxPosition() - enemyX) < (1280 - Gdx.input.getX())
+				&& (720 - Gdx.input.getY()) > GROUND_LEVEL && (GROUND_LEVEL + enemyY) > (720 - Gdx.input.getY());
 	}
 
 	private void moveBullets(float delta) {
@@ -371,10 +356,8 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 	private void handleInput() {
 		if (weapon.isAmmo) {
-			if (Gdx.input.isTouched()
-					&& TimeUtils.millis() > clickDelay + weapon.fireRate) {
-				Position touch = new Position(Gdx.input.getX(),
-						Gdx.input.getY());
+			if (Gdx.input.isTouched() && TimeUtils.millis() > clickDelay + weapon.fireRate) {
+				Position touch = new Position(Gdx.input.getX(), Gdx.input.getY());
 				clickDelay = TimeUtils.millis();
 				moveWeapon(touch);
 				ammoDecrease();
@@ -383,8 +366,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 			}
 		}
 		if (!weapon.isAmmo) {
-			if (Gdx.input.isTouched()
-					&& TimeUtils.millis() > clickDelay + weapon.reload) {
+			if (Gdx.input.isTouched() && TimeUtils.millis() > clickDelay + weapon.reload) {
 				clickDelay = TimeUtils.millis();
 				reload();
 			}
@@ -392,13 +374,10 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 	}
 
 	private void moveWeapon(Position touch) {
-		float cathetusA = touch.x
-				- (fort.getX() + fort.getWidth() - (weapon.getWidth() - 10));
-		float temp = Gdx.graphics.getHeight()
-				- (fort.getOriginY() + fort.getHeight() + 45);
+		float cathetusA = touch.x - (fort.getX() + fort.getWidth() - (weapon.getWidth() - 10));
+		float temp = Gdx.graphics.getHeight() - (fort.getOriginY() + fort.getHeight() + 45);
 		float cathetusB = touch.y - temp;
-		float tangens = (float) Math
-				.toDegrees(Math.atan2(cathetusB, cathetusA));
+		float tangens = (float) Math.toDegrees(Math.atan2(cathetusB, cathetusA));
 
 		weapon.setRotation(-tangens);
 	}
@@ -425,8 +404,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 
 	private void shootFire(Position target) {
 		Position from = new Position(weapon.getX(), weapon.getY());
-		Vector2 velocity = new Vector2(Math.abs(target.x - from.x),
-				(-(target.y - from.y) - fort.getHeight()));
+		Vector2 velocity = new Vector2(Math.abs(target.x - from.x), (-(target.y - from.y) - fort.getHeight()));
 		Bullet newBullet = new Bullet(from, velocity);
 		bullets.add(newBullet);
 	}
@@ -447,8 +425,7 @@ public class PlayScreen extends PlayScreenFields implements Screen,
 			if (!enemys.get(i).isAttack) {
 				float oldPosition = enemys.get(i).getxPosition();
 				int speed = enemys.get(i).getWalkSpeed();
-				enemys.get(i).setxPosition(
-						(int) ((delta * speed) + oldPosition));
+				enemys.get(i).setxPosition((int) ((delta * speed) + oldPosition));
 			}
 		}
 	}
